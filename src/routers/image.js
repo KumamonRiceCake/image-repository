@@ -189,16 +189,21 @@ router.get('/image/me', auth, async (req, res) => {
         sort[parts[0]] = parts[1] === 'desc' ? -1 : 1;
     }
 
+    const params = {
+        path: 'images',
+        options: {
+            limit: parseInt(req.query.limit),
+            skip: parseInt(req.query.skip),
+            sort
+        }
+    };
+
+    if (req.query.tag) {
+        params.match = { tag: req.query.tag };
+    }
+
     try {
-        await req.user.populate({
-            path: 'images',
-            match: { tag: req.query.tag },
-            options: {
-                limit: parseInt(req.query.limit),
-                skip: parseInt(req.query.skip),
-                sort
-            }
-        }).execPopulate();
+        await req.user.populate(params).execPopulate();
 
         if (!req.user.images) {
             return res.status(404).send();
