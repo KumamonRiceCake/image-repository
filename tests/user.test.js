@@ -108,7 +108,7 @@ test('Should logout logged-in user', async () => {
 
     await request(app)
         .post('/users/logout')
-        .set('Authorization', `Bearer ${user.tokens[0].token}`)
+        .set('Cookie', [`auth_token=${user.tokens[0].token}`])
         .send()
         .expect(200);
 
@@ -134,7 +134,7 @@ test('Should logout all tokens of logged-in user', async () => {
 
     await request(app)
         .post('/users/logoutAll')
-        .set('Authorization', `Bearer ${user.tokens[0].token}`)
+        .set('Cookie', [`auth_token=${user.tokens[0].token}`])
         .send()
         .expect(200);
 
@@ -152,7 +152,7 @@ test('Should logout all tokens of user if not logged-in', async () => {
 test('Should get profile for user', async () => {
     await request(app)
         .get('/users/me')
-        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
         .send()
         .expect(200);
 });
@@ -167,7 +167,7 @@ test('Should not get profile for unauthenticated user', async () => {
 test('Should update valid user fields: name, email, and password', async () => {
     await request(app)
         .patch('/users/me')
-        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
         .send({
             name: 'Samantha',
             email: 'samantha123@newemail.com',
@@ -185,7 +185,7 @@ test('Should update valid user fields: name, email, and password', async () => {
 test('Should not update user with invalid email, or password', async () => {
     await request(app)
         .patch('/users/me')
-        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
         .send({
             email: 'samemail.com'
         })
@@ -193,7 +193,7 @@ test('Should not update user with invalid email, or password', async () => {
 
     await request(app)
         .patch('/users/me')
-        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
         .send({
             password: 'pass9'
         })
@@ -203,7 +203,7 @@ test('Should not update user with invalid email, or password', async () => {
 test('Should not update invalid user fields', async () => {
     await request(app)
         .patch('/users/me')
-        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
         .send({
             location: 'New York'
         })
@@ -222,7 +222,7 @@ test('Should not update user if unauthenticated', async () => {
 test('Should delete account for user', async () => {
     await request(app)
         .delete('/users/me')
-        .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+        .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
         .send()
         .expect(200);
 
