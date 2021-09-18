@@ -1,5 +1,6 @@
 const express = require('express');
 const { listFolders, createFolder, listFiles, uploadFile, deleteFile, emptyDirectory } = require('./utils/s3');
+const { decode } = require('./utils/pathModifier');
 const upload = require('./utils/upload');
 const auth = require('../middleware/auth');
 const Image = require('../models/image');
@@ -40,14 +41,14 @@ router.post('/image', auth, upload.single('image'), async (req, res) => {
 });
 
 // List files and folders in folder
-router.get('/image/directory', auth, async (req, res) => {
+router.get('/image/list', auth, async (req, res) => {
     // directory field not provided
-    if (req.body.directory === undefined) {
+    if (req.query.directory === undefined) {
         return res.status(400).send();
     }
 
     try {
-        const fileList = await listFiles(req.user._id + '/' + req.body.directory.trim());
+        const fileList = await listFiles(req.user._id + '/' + decode(req.query.directory).trim());
 
         if (fileList.length === 0) {
             return res.status(404).send({ error: 'Directory not exist' });
@@ -60,14 +61,14 @@ router.get('/image/directory', auth, async (req, res) => {
 });
 
 // Get file link
-router.get('/image', auth, async (req, res) => {
+router.get('/image/link', auth, async (req, res) => {
     // filepath not provided
-    if (req.body.directory === undefined || req.body.filename === undefined) {
+    if (req.query.directory === undefined || req.query.filename === undefined) {
         return res.status(400).send();
     }
     
     try {
-        const image = await Image.findOne({ directory: req.body.directory.trim(), filename: req.body.filename, owner: req.user._id });
+        const image = await Image.findOne({ directory: decode(req.query.directory).trim(), filename: req.query.filename, owner: req.user._id });
         if (!image) {
             return res.status(404).send();
         }
@@ -80,12 +81,12 @@ router.get('/image', auth, async (req, res) => {
 
 // List folders
 router.get('/image/folders', auth, async (req, res) => {
-    if (req.body.directory === undefined) {
+    if (req.query.directory === undefined) {
         return res.status(400).send();
     }
 
     try {
-        const folders = await listFolders(req.user._id + '/' + req.body.directory.trim());
+        const folders = await listFolders(req.user._id + '/' + decode(req.query.directory).trim());
         if (folders.error) {
             return res.status(404).send(folders.error);
         }
@@ -117,11 +118,13 @@ router.post('/image/folders', auth, async (req, res) => {
 // Delete file or folder
 router.delete('/image', auth, async (req, res) => {
     // directory or folderName not provided
-    if (req.body.directory === undefined || req.body.filename === undefined) {
+    if (req.query.directory === undefined || req.query.filename === undefined) {
         return res.status(400).send();
     }
 
-    const filepath = req.user._id + '/' + req.body.directory.trim() + req.body.filename;
+    const directory = decode(req.query.directory).trim();
+    const filename = decode(req.query.filename);
+    const filepath = req.user._id + '/' + directory + filename;
 
     try {
         const deletionError = await deleteFile(filepath);
@@ -131,8 +134,8 @@ router.delete('/image', auth, async (req, res) => {
         }
 
         // If it is a file, delete data from database
-        if (!req.body.filename.endsWith('/')) {
-            const deletedImage = await Image.findOneAndDelete({ directory: req.body.directory.trim(), filename: req.body.filename, owner: req.user._id });
+        if (!filename.endsWith('/')) {
+            const deletedImage = await Image.findOneAndDelete({ directory, filename, owner: req.user._id });
             if (!deletedImage) {
                 return res.status(404).send();
             }
@@ -148,12 +151,12 @@ router.delete('/image', auth, async (req, res) => {
 // Empty directory
 router.delete('/image/directory', auth, async (req, res) => {
     // directory field not provided
-    if (req.body.directory === undefined) {
+    if (req.query.directory === undefined) {
         return res.status(400).send();
     }
 
     try {
-        const filelist = await emptyDirectory(req.user._id + '/' + req.body.directory.trim());
+        const filelist = await emptyDirectory(req.user._id + '/' + decode(req.query.directory).trim());
         // directory not exist
         if (filelist.error) {
             return res.status(404).send(filelist);

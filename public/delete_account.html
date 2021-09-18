@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Delete Account</title>
+        <link rel="icon" href="/img/favicon.png">
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <body>
+        <a href="/dashboard">Return to dashboard</a>
+        <label>Please type "Delete my account" to confirm deletion.</label>
+        <input type="text" id="confirm" />
+        <button id="delete_button">Delete Account</button>
+        <script>
+            const deleteUserUrl = '/users/me';
+
+            document.querySelector('#delete_button').addEventListener('click', () => {
+                if (document.querySelector('#confirm').value === 'Delete my account') {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('DELETE', deleteUserUrl);
+
+                    xhr.onreadystatechange = function () {
+                        if (this.readyState === 4 && this.status === 200) {
+                            location.href = '/';
+                        }
+                    };
+
+                    xhr.send();
+                } else {
+                    alert('Please type confirm message first.');
+                }
+            });
+        </script>
+    </body>
+</html>

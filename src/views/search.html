@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Dashboard</title>
+        <link rel="icon" href="/img/folder.png">
+        <link rel="stylesheet" href="/css/styles.css">
+    </head>
+    <body>
+        <div>
+            <input type="text" id="search_tag">
+            <button id="tag_search_button">Search</button>
+        </div>
+        <button id="back_to_dashboard_button">Back to dashboard</button>
+        <div>
+            <button id="sign_out">Sign Out</button>
+        </div>
+
+        <div id="file-list"></div>
+        <div id="detail-box"></div>
+
+        <script type="text/template" id="file-list-template">
+            <ol class="filename" onclick="viewDetail('{{directory}}', '{{filename}}', '{{url}}')">{{filename}}</ol>
+        </script>
+
+        <script type="text/template" id="image-detail-template">
+            <img src="{{url}}" alt="{{filename}}" width="300" height="300">
+            <button onclick="downloadImage('{{url}}')">Download</button>
+            <button onclick="deleteImage('{{directory}}', '{{filename}}')">Delete</button>
+        </script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+        <script src="/js/search.js"></script>
+    </body>
+</html>

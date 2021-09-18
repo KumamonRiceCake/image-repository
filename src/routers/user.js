@@ -12,8 +12,9 @@ router.post('/users', async (req, res) => {
         await user.save();
         const token = await user.generateAuthToken();
         res.cookie('auth_token', token);
-        res.sendFile(path.resolve(__dirname, '..', 'views', 'private.html'));
-        res.status(201).send({ user, token });
+        res.status(201).redirect('/dashboard');
+        //res.status(201).sendFile(path.resolve(__dirname, '..', 'views', 'dashboard.html'));
+        //res.status(201).send({ user, token });
     } catch (e) {
         res.status(400).send(e);
     }
@@ -24,8 +25,9 @@ router.post('/users/login', async (req, res) => {
         const user = await User.findByCredentials(req.body.email, req.body.password);
         const token = await user.generateAuthToken();
         res.cookie('auth_token', token);
-        res.sendFile(path.resolve(__dirname, '..', 'views', 'private.html'));
-        res.send({ user, token });
+        res.status(200).redirect('/dashboard');
+        //res.status(200).sendFile(path.resolve(__dirname, '..', 'views', 'dashboard.html'));
+        //res.send({ user, token });
     } catch (e) {
         res.status(400).send(e.message);
     }
@@ -48,6 +50,7 @@ router.post('/users/logoutAll', auth, async (req, res) => {
     try {
         req.user.tokens = [];
         await req.user.save();
+
         res.send();
     } catch (e) {
         res.status(500).send();
@@ -60,6 +63,11 @@ router.get('/users/me', auth, async (req, res) => {
 
 router.patch('/users/me', auth, async (req, res) => {
     const updates = Object.keys(req.body);
+
+    if (updates.length === 0) {
+        return res.status(400).send({ error: 'Please provide at least one field!' });
+    }
+
     const allowedUpdates = ['name', 'email', 'password'];
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
