@@ -1,3 +1,7 @@
+/**
+ * This file includes Image schema of MongoDB
+ */
+
 const mongoose = require('mongoose');
 
 const imageSchema = new mongoose.Schema({

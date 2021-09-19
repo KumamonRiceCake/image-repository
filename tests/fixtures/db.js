@@ -1,3 +1,7 @@
+/**
+ * Initial database setup for tests
+ */
+
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const User = require('../../src/models/user');

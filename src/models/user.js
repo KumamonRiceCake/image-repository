@@ -1,3 +1,7 @@
+/**
+ * This file includes User schema of MongoDB and relative functions
+ */
+
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
@@ -43,6 +47,7 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
+// Create a virtual property 'images' that's computed from 'Image'
 userSchema.virtual('images', {
     ref: 'Image',
     localField: '_id',
@@ -60,6 +65,7 @@ userSchema.methods.toJSON = function () {
     return userObject;
 };
 
+// Generate authentication token for logging-in user
 userSchema.methods.generateAuthToken = async function () {
     const user = this;
     const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
@@ -70,6 +76,7 @@ userSchema.methods.generateAuthToken = async function () {
     return token;
 };
 
+// Verify user with email and password
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email });
 
@@ -97,7 +104,7 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
-//Delete user images when user is removed
+//Delete user images from DB when user is removed
 userSchema.pre('remove', async function (next) {
     const user = this;
     await Image.deleteMany({ owner: user._id });

@@ -1,9 +1,19 @@
+/**
+ * This tests scenarios of user router
+ */
+
 const request = require('supertest');
 const app = require('../src/app');
 const User = require('../src/models/user');
 const { userOne, setupDatabase } = require('./fixtures/db');
 
+// Setup DB before each scenario
 beforeEach(setupDatabase);
+
+/**
+ * User signup scenarios below.
+ * POST: /users
+ */
 
 test('Should signup a new user', async () => {
     const newUser = {
@@ -12,6 +22,7 @@ test('Should signup a new user', async () => {
         password: 'anaPass123!'
     };
 
+    // successful signup redirect page to dashboard
     await request(app).post('/users').send(newUser).expect(302).expect('Location', '/dashboard');
 
     // Assert that the DB was changed correctly
@@ -69,11 +80,16 @@ test('Should not signup user with existing email', async () => {
     }).expect(400);
 });
 
+/**
+ * User login scenarios below.
+ * POST: /users/login
+ */
+
 test('Should login existing user', async () => {
     await request(app).post('/users/login').send({
         email: userOne.email,
         password: userOne.password
-    }).expect(302).expect('Location', '/dashboard');
+    }).expect(302).expect('Location', '/dashboard');    // successful login redirect page to dashboard
 
     const user = await User.findById(userOne._id);
 });
@@ -91,6 +107,11 @@ test('Should not login if password is wrong', async () => {
         password: 'wrongPass123'
     }).expect(400);
 });
+
+/**
+ * User logout scenarios below.
+ * POST: /users/logout
+ */
 
 test('Should logout logged-in user', async () => {
     await request(app).post('/users/login').send({
@@ -118,6 +139,11 @@ test('Should not logout user who is not logged-in', async () => {
         .expect(401);
 });
 
+/**
+ * All user tokens logout scenarios below.
+ * POST: /users/loginAll
+ */
+
 test('Should logout all tokens of logged-in user', async () => {
     await request(app).post('/users/login').send({
         email: userOne.email,
@@ -144,6 +170,11 @@ test('Should logout all tokens of user if not logged-in', async () => {
         .expect(401);
 });
 
+/**
+ * User profile fetching scenarios below.
+ * GET: /users/me
+ */
+
 test('Should get profile for user', async () => {
     await request(app)
         .get('/users/me')
@@ -158,6 +189,11 @@ test('Should not get profile for unauthenticated user', async () => {
         .send()
         .expect(401);
 });
+
+/**
+ * User profile update scenarios below.
+ * PATCH: /users/me
+ */
 
 test('Should update valid user fields: name, email, and password', async () => {
     await request(app)
@@ -213,6 +249,11 @@ test('Should not update user if unauthenticated', async () => {
         })
         .expect(401);
 });
+
+/**
+ * User deletion scenarios below.
+ * DELETE: /users/me
+ */
 
 test('Should delete account for user', async () => {
     await request(app)

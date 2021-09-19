@@ -1,3 +1,7 @@
+/**
+ * Functions about files and AWS S3 interactions
+ */
+
 const AWS = require('aws-sdk');
 
 const bucketName = process.env.BUCKET_NAME;
@@ -16,6 +20,7 @@ const s3 = new AWS.S3({
     params: { Bucket: bucketName }
 });
 
+// List folders in directory
 const listFolders = async (directory) => {
     const listedObjects = await s3.listObjectsV2({ Delimiter: '/', Prefix: directory }).promise();
     
@@ -30,6 +35,7 @@ const listFolders = async (directory) => {
     return folders;
 };
 
+// Create new folder
 const createFolder = (directory, folderName, callback) => {
     folderName = folderName.trim();
 
@@ -49,6 +55,7 @@ const createFolder = (directory, folderName, callback) => {
     });
 }
 
+// List all files and folders in directory
 const listFiles = async (directory) => {
     const listedObjects = await s3.listObjectsV2({ Prefix: directory }).promise();
 
@@ -68,6 +75,7 @@ const listFiles = async (directory) => {
     return keys;
 };
 
+// Upload file to S3 cloud storage
 const uploadFile = async (folder, file) => {
     const fileKey = folder + file.name;
 
@@ -87,6 +95,7 @@ const uploadFile = async (folder, file) => {
     return buildUrl(fileKey);
 };
 
+// Delete file from S3 cloud storage
 const deleteFile = async (filepath) => {
     const deletedFile = await s3.listObjectsV2({ Prefix: filepath }).promise();
 
@@ -101,6 +110,7 @@ const deleteFile = async (filepath) => {
     console.log('File deleted!');
 }
 
+// Delete folder and all contents in it recursively
 const emptyDirectory = async (directory) => {
     const listedObjects = await s3.listObjectsV2({ Prefix: directory }).promise();
 
@@ -126,6 +136,7 @@ const emptyDirectory = async (directory) => {
     return deletedFileList;
 }
 
+// return url of file saved in S3
 const buildUrl = (filepath) => { return `https://s3.${process.env.BUCKET_REGION}.amazonaws.com/${process.env.BUCKET_NAME}/${filepath}`; }
 
 module.exports = {

@@ -10,11 +10,11 @@
             <div class="profile-centered-form">
                 <h1>Edit profile information</h1>
                 <label for="name">Name</label>
-                <input type="text" id="name" />
+                <input type="text" id="name">
                 <label for="email">Email</label>
-                <input type="text" id="email" />
+                <input type="text" id="email">
                 <label for="password">Password</label>
-                <input type="text" id="password" />
+                <input type="text" id="password">
                 <button id="update_button">Save Change</button>
                 <a href="/dashboard">Return to dashboard</a>
             </div>
@@ -24,13 +24,14 @@
             const updateProfileUrl = '/users/me';
 
             document.querySelector('#update_button').addEventListener('click', () => {
-                const xhr = new XMLHttpRequest();
                 const updatedName = document.querySelector('#name').value;
                 const updatedEmail = document.querySelector('#email').value;
                 const updatedPassword = document.querySelector('#password').value;
 
-                xhr.open('PATCH', updateProfileUrl);
+                if (updatedPassword.length < 7) { return alert('Password length must be at least 7!'); }
 
+                const xhr = new XMLHttpRequest();
+                xhr.open('PATCH', updateProfileUrl);
                 xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
 
                 xhr.onload = function () {
@@ -39,6 +40,10 @@
                     } else {
                         alert(this.responseText);
                     }
+                    // Clear text inputs
+                    document.querySelector('#name').value = '';
+                    document.querySelector('#email').value = '';
+                    document.querySelector('#password').value = '';
                 };
 
                 const data = {};

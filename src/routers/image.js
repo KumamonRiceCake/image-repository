@@ -1,3 +1,7 @@
+/**
+ * This file includes router about images
+ */
+
 const express = require('express');
 const { listFolders, createFolder, listFiles, uploadFile, deleteFile, emptyDirectory } = require('./utils/s3');
 const { decode } = require('./utils/pathModifier');
@@ -7,7 +11,10 @@ const Image = require('../models/image');
 
 const router = new express.Router();
 
-// Upload image
+/**
+ * Upload image.
+ * Requirement: file and directory
+ */
 router.post('/image', auth, upload.single('image'), async (req, res) => {
     if (!req.file || req.body.directory === undefined) {
         return res.status(400).send();
@@ -40,7 +47,10 @@ router.post('/image', auth, upload.single('image'), async (req, res) => {
     res.status(400).send({ error: error.message });
 });
 
-// List files and folders in folder
+/**
+ * List files and folders in directory
+ * Requirement: directory
+ */
 router.get('/image/list', auth, async (req, res) => {
     // directory field not provided
     if (req.query.directory === undefined) {
@@ -60,7 +70,10 @@ router.get('/image/list', auth, async (req, res) => {
     }
 });
 
-// Get file link
+/**
+ * Get file link
+ * Requirement: directory and filename
+ */
 router.get('/image/link', auth, async (req, res) => {
     // filepath not provided
     if (req.query.directory === undefined || req.query.filename === undefined) {
@@ -79,7 +92,10 @@ router.get('/image/link', auth, async (req, res) => {
     }
 });
 
-// List folders
+/**
+ * List folders in directory
+ * Requirement: directory
+ */
 router.get('/image/folders', auth, async (req, res) => {
     if (req.query.directory === undefined) {
         return res.status(400).send();
@@ -96,7 +112,10 @@ router.get('/image/folders', auth, async (req, res) => {
     }
 });
 
-// Create folder
+/**
+ * Create folder
+ * Requirement: directory and folderName
+ */
 router.post('/image/folders', auth, async (req, res) => {
     // directory or folderName not provided
     if (req.body.directory === undefined || req.body.folderName === undefined) {
@@ -115,7 +134,10 @@ router.post('/image/folders', auth, async (req, res) => {
     }
 });
 
-// Delete file or folder
+/**
+ * Delete file or empty folder
+ * Requirement: directory and filename
+ */
 router.delete('/image', auth, async (req, res) => {
     // directory or folderName not provided
     if (req.query.directory === undefined || req.query.filename === undefined) {
@@ -148,7 +170,10 @@ router.delete('/image', auth, async (req, res) => {
     }
 });
 
-// Empty directory
+/**
+ * Delete folder and its contents recursively
+ * Requirement: directory
+ */
 router.delete('/image/directory', auth, async (req, res) => {
     // directory field not provided
     if (req.query.directory === undefined) {
@@ -181,10 +206,15 @@ router.delete('/image/directory', auth, async (req, res) => {
     }
 });
 
-// List all files of user
-// GET /image/me?limit=10&skip=10
-// GET /image/me?sortBy=createdAt:desc
-// GET /image/me?tag=dogs
+/**
+ * List all files of user.
+ * Options: limit, skip, sortBy, tag
+ * 
+ * Examples
+ * GET /image/me?limit=10&skip=10
+ * GET /image/me?sortBy=createdAt:desc
+ * GET /image/me?tag=dogs
+ */
 router.get('/image/me', auth, async (req, res) => {
     const sort = {};
     if (req.query.sortBy) {

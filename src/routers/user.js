@@ -1,3 +1,7 @@
+/**
+ * This file includes router about users
+ */
+
 const express = require('express');
 const path = require('path');
 const { emptyDirectory } = require('./utils/s3');
@@ -5,7 +9,12 @@ const User = require('../models/user');
 const auth = require('../middleware/auth');
 const router = new express.Router();
 
+/**
+ * Sign up new user.
+ * Requirement: user name, email, password
+ */
 router.post('/users', async (req, res) => {
+    // Check exisiting user email
     const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) { return res.status(400).send({ error: 'User with this email address already exists.' }); }
 
@@ -15,23 +24,32 @@ router.post('/users', async (req, res) => {
         await user.save();
         const token = await user.generateAuthToken();
         res.cookie('auth_token', token);
-        res.status(201).redirect('/dashboard');
+        res.status(201).redirect('/dashboard'); // Successful signup redirect page to dashboard
     } catch (e) {
-        res.status(400).send(e);
+        // Client checks user name and password length, so it sends alert message about invalid email and redirects to the register page
+        res.status(400).send('<script>alert("Please enter a valid email address!");location.href="/register.html";</script>');
     }
 });
 
+/**
+ * Login user.
+ * Requirement: email, password
+ */
 router.post('/users/login', async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password);
         const token = await user.generateAuthToken();
         res.cookie('auth_token', token);
-        res.status(200).redirect('/dashboard');
+        res.status(200).redirect('/dashboard'); // Successful signup redirect page to dashboard
     } catch (e) {
-        res.status(400).send(e.message);
+        // When login fails, sends alert message and redirects to the login page
+        res.status(400).send(`<script>alert("${e.message}");location.href="/";</script>`);
     }
 });
 
+/**
+ * Logout user.
+ */
 router.post('/users/logout', auth, async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter((token) => {
@@ -45,6 +63,9 @@ router.post('/users/logout', auth, async (req, res) => {
     }
 });
 
+/**
+ * Logout all user tokens.
+ */
 router.post('/users/logoutAll', auth, async (req, res) => {
     try {
         req.user.tokens = [];
@@ -56,10 +77,17 @@ router.post('/users/logoutAll', auth, async (req, res) => {
     }
 });
 
+/**
+ * Get user profile.
+ */
 router.get('/users/me', auth, async (req, res) => {
     res.send(req.user);
 });
 
+/**
+ * Update user profile.
+ * Allowed update fields: name, email, password
+ */
 router.patch('/users/me', auth, async (req, res) => {
     const updates = Object.keys(req.body);
 
@@ -83,6 +111,9 @@ router.patch('/users/me', auth, async (req, res) => {
     }
 });
 
+/**
+ * Delete user.
+ */
 router.delete('/users/me', auth, async (req, res) => {
     try {
         await req.user.remove();

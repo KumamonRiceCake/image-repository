@@ -1,11 +1,16 @@
+/**
+ * This tests scenarios of image router
+ */
+
 const request = require('supertest');
 const app = require('../src/app');
 const Image = require('../src/models/Image');
 const { userOne, setupDatabase } = require('./fixtures/db');
 const { emptyDirectory } = require('../src/routers/utils/s3');
 
+// Setup DB and test image files before each scenario
 beforeEach(async () => {
-    await emptyDirectory('');
+    await emptyDirectory('');   // Empty test directory to start in the same environment
     await setupDatabase();
     await request(app)
         .post('/image')
@@ -34,6 +39,11 @@ beforeEach(async () => {
         })
         .expect(201);
 });
+
+/**
+ * Image uploading scenarios below.
+ * POST: /image
+ */
 
 test('Should upload image file for user', async () => {
     const response = await request(app)
@@ -108,6 +118,11 @@ test('Should not upload duplicate image file', async () => {
         .expect(400);
 });
 
+/**
+ * Folder list fetching scenarios below.
+ * GET: /image/folders
+ */
+
 test('Should fetch folders in directory', async () => {
     const response = await request(app)
         .get('/image/folders?directory=test1%')
@@ -144,6 +159,11 @@ test('Should not fetch folders for unauthenticated user', async () => {
         })
         .expect(401);
 });
+
+/**
+ * Folder creation scenarios below.
+ * POST: /image/folders
+ */
 
 test('Should create folder for user', async () => {
     await request(app)
@@ -206,6 +226,11 @@ test('Should not create folder for unauthenticated user', async () => {
         .expect(401);
 });
 
+/**
+ * File deletion scenarios below.
+ * DELETE: /image
+ */
+
 test('Should delete file for user', async () => {
     const response = await request(app)
         .delete('/image?directory=test1%test1-1%&filename=ex1.png')
@@ -266,6 +291,11 @@ test('Should not delete file for unauthenticated user', async () => {
         .expect(401);
 });
 
+/**
+ * File list fetching scenarios below.
+ * GET: /image/list
+ */
+
 test('Should fetch files in directory for user', async () => {
     const response = await request(app)
         .get('/image/list?directory=test1%test1-1%')
@@ -298,6 +328,11 @@ test('Should fetch files in directory for unauthenticated user', async () => {
         .send()
         .expect(401);
 });
+
+/**
+ * Directory deletion scenarios below.
+ * DELETE: /image/directory
+ */
 
 test('Should empty directory for user', async () => {
     await request(app)
@@ -333,6 +368,11 @@ test('Should empty directory for user', async () => {
         .send()
         .expect(401);
 });
+
+/**
+ * File URL link fetching scenarios below.
+ * GET: /image/link
+ */
 
 test('Should get url link of file for user', async () => {
     const response = await request(app)
@@ -382,6 +422,11 @@ test('Should not get url link of file for unauthenticated user', async () => {
         .send()
         .expect(401);
 });
+
+/**
+ * All user images fetching with options scenarios below.
+ * GET: /image/me
+ */
 
 test('Should fetch all files of user', async () => {
     const response = await request(app)

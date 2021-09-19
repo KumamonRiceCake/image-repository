@@ -19,7 +19,9 @@
         <script>
             const deleteUserUrl = '/users/me';
 
+            // Delete user account
             document.querySelector('#delete_button').addEventListener('click', () => {
+                // User needs to confirm deletion
                 if (document.querySelector('#confirm').value === 'Delete my account') {
                     const xhr = new XMLHttpRequest();
                     xhr.open('DELETE', deleteUserUrl);
