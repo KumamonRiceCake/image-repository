@@ -149,6 +149,10 @@ a:visited {
     right: 1vw;
 }
 
+.top-menu-profile a {
+    color: rgb(255, 255, 255);
+}
+
 .top-menu ul li {
     display: inline;
     border-left: 1px solid #c0c0c0;
