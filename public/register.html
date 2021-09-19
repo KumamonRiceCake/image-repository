@@ -2,19 +2,24 @@
 <html lang="en">
     <head>
         <title>Register</title>
-        <link rel="icon" href="/img/favicon.png">
+        <link rel="icon" href="/img/album.ico">
         <link rel="stylesheet" href="/css/styles.css">
     </head>
     <body>
-        <a href="/">Login</a>
-        <form method="POST" action="/users">
-            <label for="name">Name</label>
-            <input type="text" name="name" id="name" />
-            <label for="email">Email</label>
-            <input type="text" name="email" id="email" />
-            <label for="password">Password</label>
-            <input type="text" name="password" id="password" />
-            <button>Register</button>
-        </form>
+        <div class="main">
+            <div class="centered-form">
+                <h1>Image Repository</h1>
+                <form method="POST" action="/users">
+                    <label for="name">Name</label>
+                    <input type="text" name="name" id="name" required>
+                    <label for="email">Email</label>
+                    <input type="text" name="email" id="email" required>
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required>
+                    <button>Register</button>
+                </form>
+                <p>Already have account? <a href="/">Login</a></p>
+            </div>
+        </div>
     </body>
 </html>

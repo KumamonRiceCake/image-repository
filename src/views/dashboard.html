@@ -1,59 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <title>Dashboard</title>
-        <link rel="icon" href="/img/folder.png">
+        <link rel="icon" href="/img/album.ico">
         <link rel="stylesheet" href="/css/styles.css">
     </head>
     <body>
-        <div>
-            <input type="text" id="search_tag">
-            <button id="tag_search_button">Search</button>
-        </div>
-        <div>
-            <label>Settings</label>
-            <a href="edit_profile.html">Edit Profile</a>
-            <a href="delete_account.html">Delete Account</a>
-            <a href="help.html">Help</a>
-            <button id="sign_out">Sign Out</button>
-        </div>
-        <div>
-            <h3 id="current_directory"></h3>
-            <button id="back_button">Back</button>
-        </div>
-        <div id="file-list"></div>
-        <div id="detail-box"></div>
-        <div id="upload-box">
-            <h3>File Upload</h3>
-            <label id="upload_status"></label>
-            <input type="file" id="file_selector" accept=".jpg, .jpeg, .png, .bmp, .gif">
-            <label for="upload_tag">Tag</label>
-            <input type="text" id="upload_tag">
-            <button id="upload_button">Upload</button>
-        </div>
-        <div id="folder-creation-box">
-            <h3>Create Folder</h3>
-            <label for="new_folder_name">Tag</label>
-            <input type="text" id="new_folder_name">
-            <button id="create_button">Create</button>
+        <div class="dashboard">
+            <div class="top-menu">
+                <div class="top-menu-search">
+                    <input type="text" placeholder="Tag Search" id="search_tag">
+                    <button id="tag_search_button">Search</button>
+                </div>
+                <div class="top-menu-profile">
+                    <ul>
+                        <li><a href="edit_profile.html">Edit Profile</a></li>
+                        <li><a href="delete_account.html">Delete Account</a></li>
+                        <li><a href="help.html">Help</a></li>
+                        <li class="sign_out" id="sign_out">Sign Out</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pathfinder">
+                <h1 id="current_directory"></h1>
+                <button id="back_button">Back</button>
+            </div>
+            <div class="dashboard-main">
+                <div class="file-list" id="file-list">
+                    <h1>Files in current directory</h1>
+                </div>
+                <div class="dashboard-additional-menu" id="dashboard-additional-menu">
+                    <div class="detail-box" id="detail-box"></div>
+                    <div class="upload-box" id="upload-box">
+                        <h3>File Upload</h3>
+                        <label id="upload_status"></label>
+                        <input type="file" id="file_selector" accept=".jpg, .jpeg, .png, .bmp, .gif">
+                        <input type="text" placeholder="Image Tag" id="upload_tag">
+                        <button id="upload_button">Upload</button>
+                    </div>
+                    <div class="folder-creation-box" id="folder-creation-box">
+                        <h3>Create Folder</h3>
+                        <input type="text" placeholder="Folder Name" id="new_folder_name">
+                        <button id="create_button">Create</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <script type="text/template" id="file-list-template">
-            <ol class="filename" onclick="viewDetail(this)">{{filename}}</ol>
+            <ol class="filename" onclick="viewDetail('{{filename}}')">- {{filename}}</ol>
         </script>
 
         <script type="text/template" id="image-detail-template">
-            <img src="{{url}}" alt="{{filename}}" width="300" height="300">
-            <button onclick="downloadImage('{{url}}')">Download</button>
-            <button onclick="deleteImage('{{filename}}')">Delete</button>
+            <img src="{{url}}" alt="{{filename}}">
+            <div class="button-set">
+                <button onclick="downloadImage('{{url}}')">Download</button>
+                <button onclick="deleteImage('{{filename}}')">Delete</button>
+            </div>
         </script>
 
         <script type="text/template" id="folder-detail-template">
-            <img src="{{url}}" alt="{{filename}}" width="300" height="300">
-            <button onclick="enterDirectory('{{filename}}')">Enter</button>
-            <button onclick="deleteFolder('{{filename}}')">Delete</button>
+            <img src="{{url}}" alt="{{filename}}">
+            <div class="button-set">
+                <button onclick="enterDirectory('{{filename}}')">Enter</button>
+                <button onclick="deleteFolder('{{filename}}')">Delete</button>
+            </div>
         </script>
-
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>

@@ -49,6 +49,12 @@ document.querySelector('#back_to_dashboard_button').addEventListener('click', ()
     location.href = '/dashboard';
 });
 
+document.querySelector('#search_tag').addEventListener("keyup", (event) => {
+    if (event.keyCode === 13) {
+        document.querySelector("#tag_search_button").click();
+    }
+});
+
 const viewDetail = function (directory, filename, url) {
     const html = Mustache.render(imageDetailTemplate, {
         directory,

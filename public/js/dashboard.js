@@ -44,6 +44,9 @@ document.querySelector('#sign_out').addEventListener('click', () => {
 
 document.querySelector('#upload_button').addEventListener('click', () => {
     const file = document.querySelector('#file_selector').files[0];
+
+    if (!file) { return alert('Please choose a file!'); }
+
     const tag = document.querySelector('#upload_tag').value;
     let statusMessage = document.querySelector('#upload_status');
 
@@ -121,9 +124,19 @@ document.querySelector('#tag_search_button').addEventListener('click', () => {
     location.href = '/dashboard/search?tag=' + searchTag.trim();
 });
 
-const viewDetail = function (element) {
-    const filename = element.innerHTML;
+document.querySelector('#search_tag').addEventListener("keyup", (event) => {
+    if (event.keyCode === 13) { document.querySelector("#tag_search_button").click(); }
+});
 
+document.querySelector('#upload_tag').addEventListener("keyup", (event) => {
+    if (event.keyCode === 13) { document.querySelector("#upload_button").click(); }
+});
+
+document.querySelector('#new_folder_name').addEventListener("keyup", (event) => {
+    if (event.keyCode === 13) { document.querySelector("#create_button").click(); }
+});
+
+const viewDetail = function (filename) {
     // Folder
     if (filename.charAt(filename.length-1) === '/') {
         const html = Mustache.render(folderDetailTemplate, {
@@ -181,7 +194,7 @@ const deleteImage = (filename) => {
 const enterDirectory = (folderName) => {
     let { directory } = Qs.parse(location.search, { ignoreQueryPrefix: true });
     if (!directory) {
-        return location.href = `${window.location.href}?directory=${encode(folderName)}`;
+        return location.href = '/dashboard?directory=' + encode(folderName);
     }
 
     location.href = window.location.href + encode(folderName);
@@ -213,10 +226,12 @@ const getFileList = () => {
         if (this.readyState === 4 && this.status === 200) {
             const files = JSON.parse(this.responseText);
             files.forEach((filename) => {
-                const html = Mustache.render(fileListTemplate, {
-                    filename
-                })
-                $fileList.insertAdjacentHTML('beforeend', html)
+                if (filename) {
+                    const html = Mustache.render(fileListTemplate, {
+                        filename
+                    })
+                    $fileList.insertAdjacentHTML('beforeend', html)
+                }
             });
         } else {
             alert('Could not read file list!');

@@ -6,6 +6,9 @@ const auth = require('../middleware/auth');
 const router = new express.Router();
 
 router.post('/users', async (req, res) => {
+    const existingUser = await User.findOne({ email: req.body.email });
+    if (existingUser) { return res.status(400).send({ error: 'User with this email address already exists.' }); }
+
     const user = new User(req.body);
     
     try {
@@ -13,8 +16,6 @@ router.post('/users', async (req, res) => {
         const token = await user.generateAuthToken();
         res.cookie('auth_token', token);
         res.status(201).redirect('/dashboard');
-        //res.status(201).sendFile(path.resolve(__dirname, '..', 'views', 'dashboard.html'));
-        //res.status(201).send({ user, token });
     } catch (e) {
         res.status(400).send(e);
     }
@@ -26,8 +27,6 @@ router.post('/users/login', async (req, res) => {
         const token = await user.generateAuthToken();
         res.cookie('auth_token', token);
         res.status(200).redirect('/dashboard');
-        //res.status(200).sendFile(path.resolve(__dirname, '..', 'views', 'dashboard.html'));
-        //res.send({ user, token });
     } catch (e) {
         res.status(400).send(e.message);
     }

@@ -2,30 +2,41 @@
 <html lang="en">
     <head>
         <title>Dashboard</title>
-        <link rel="icon" href="/img/folder.png">
+        <link rel="icon" href="/img/album.ico">
         <link rel="stylesheet" href="/css/styles.css">
     </head>
     <body>
-        <div>
-            <input type="text" id="search_tag">
-            <button id="tag_search_button">Search</button>
+        <div class="dashboard">
+            <div class="search-top-menu">
+                <div class="search-top-menu-search">
+                    <input type="text" placeholder="Tag Search" id="search_tag">
+                    <button id="tag_search_button">Search</button>
+                    <button id="back_to_dashboard_button">Back to dashboard</button>
+                </div>
+                <div class="search-top-menu-profile">
+                    <li class="sign_out" id="sign_out">Sign Out</li>
+                </div>
+            </div>
+            <div class="search-dashboard-main">
+                <div class="search-file-list" id="file-list">
+                    <h1>Tag search result</h1>
+                </div>
+                <div class="search-dashboard-additional-menu" id="dashboard-additional-menu">
+                    <div class="search-detail-box" id="detail-box"></div>
+                </div>
+            </div>
         </div>
-        <button id="back_to_dashboard_button">Back to dashboard</button>
-        <div>
-            <button id="sign_out">Sign Out</button>
-        </div>
-
-        <div id="file-list"></div>
-        <div id="detail-box"></div>
 
         <script type="text/template" id="file-list-template">
-            <ol class="filename" onclick="viewDetail('{{directory}}', '{{filename}}', '{{url}}')">{{filename}}</ol>
+            <ol class="filename" onclick="viewDetail('{{directory}}', '{{filename}}', '{{url}}')">- {{filename}}</ol>
         </script>
 
         <script type="text/template" id="image-detail-template">
             <img src="{{url}}" alt="{{filename}}" width="300" height="300">
-            <button onclick="downloadImage('{{url}}')">Download</button>
-            <button onclick="deleteImage('{{directory}}', '{{filename}}')">Delete</button>
+            <div class="button-set">
+                <button onclick="downloadImage('{{url}}')">Download</button>
+                <button onclick="deleteImage('{{directory}}', '{{filename}}')">Delete</button>
+            </div>
         </script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>

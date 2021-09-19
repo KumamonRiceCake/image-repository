@@ -2,14 +2,20 @@
 <html lang="en">
     <head>
         <title>Delete Account</title>
-        <link rel="icon" href="/img/favicon.png">
+        <link rel="icon" href="/img/album.ico">
         <link rel="stylesheet" href="/css/styles.css">
     </head>
     <body>
-        <a href="/dashboard">Return to dashboard</a>
-        <label>Please type "Delete my account" to confirm deletion.</label>
-        <input type="text" id="confirm" />
-        <button id="delete_button">Delete Account</button>
+        <div class="profile-main">
+            <div class="delete-centered-form">
+                <h1>Delete account</h1>
+                <label>Please type <b>"Delete my account"</b> to confirm deletion.</label>
+                <input type="text" id="confirm" />
+                <button id="delete_button">Delete Account</button>
+                <a href="/dashboard">Return to dashboard</a>
+            </div>
+        </div>
+
         <script>
             const deleteUserUrl = '/users/me';
 

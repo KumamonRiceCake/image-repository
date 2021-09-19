@@ -2,19 +2,24 @@
 <html lang="en">
     <head>
         <title>Edit Profile</title>
-        <link rel="icon" href="/img/favicon.png">
+        <link rel="icon" href="/img/album.ico">
         <link rel="stylesheet" href="/css/styles.css">
     </head>
     <body>
-        <a href="/dashboard">Return to dashboard</a>
-        <label for="name">Name</label>
-        <input type="text" id="name" />
-        <label for="email">Email</label>
-        <input type="text" id="email" />
-        <label for="password">Password</label>
-        <input type="text" id="password" />
-        <button id="update_button">Save</button>
-
+        <div class="profile-main">
+            <div class="profile-centered-form">
+                <h1>Edit profile information</h1>
+                <label for="name">Name</label>
+                <input type="text" id="name" />
+                <label for="email">Email</label>
+                <input type="text" id="email" />
+                <label for="password">Password</label>
+                <input type="text" id="password" />
+                <button id="update_button">Save Change</button>
+                <a href="/dashboard">Return to dashboard</a>
+            </div>
+        </div>
+        
         <script>
             const updateProfileUrl = '/users/me';
 

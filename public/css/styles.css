@@ -1,0 +1,471 @@
+/* General Styles */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    line-height: 1.4;
+    color: #333333;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+input {
+    font-size: 14px;
+}
+
+h1 {
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: rgb(102, 102, 102);
+}
+
+input {
+    border: 1px solid #eeeeee;
+    padding: 12px;
+    outline: none;
+    border-radius: 2px;
+}
+
+button {
+    cursor: pointer;
+    padding: 12px;
+    background: #5cbfb2;
+    border: none;
+    color: white;
+    font-size: 16px;
+    transition: background .3s ease;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #803379;
+}
+
+button:disabled {
+    cursor: default;
+    background: #7c5cbf94;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:visited {
+    color:rgb(255, 255, 255);
+}
+
+/* Common elements */
+.sign_out:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Login Page Styles */
+
+.main {
+    background: #6f7386;
+    width: 100%;
+    height: 100vh;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center; /* vertical alignment */
+
+    -webkit-box-pack: center;
+    -moz-box-pack: center; 
+    -ms-flex-pack: center; 
+    justify-content: center; /* horizontal alignment */
+}
+
+.centered-form {
+    box-shadow: 0px 0px 17px 1px #1D1F26;
+    background: #F7F7FA;
+    padding: 24px;
+    width: 320px;
+}
+
+.centered-form button {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.centered-form input {
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.centered-form p {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.centered-form a:visited {
+    color: #7c5cbf94;
+}
+
+/*  Dashboard Styles */
+
+.dashboard {
+    background: #adb2cc;
+    height: 100vh;
+}
+
+/* Dashboard top menu */
+
+.top-menu {
+    background: #57656e;
+    width: 100vw;
+    flex-direction: row;
+    display: inline-flex;
+    position: relative;
+}
+
+.top-menu-search {
+    margin: 0px 20px 0px 20px;
+    padding: 5px 0px 5px 0px;
+    width: 300px;
+}
+
+.top-menu-profile {
+    position: absolute;
+    top: 30%;
+    right: 1vw;
+}
+
+.top-menu ul li {
+    display: inline;
+    border-left: 1px solid #c0c0c0;
+    padding: 0px 10px 0px 10px;
+    margin: 5px 0px 5px 0px;
+    color: rgb(255, 255, 255);
+}
+
+.top-menu ul li:first-child {
+    border-left: none;
+}
+
+/* Dashboard pathfinder */
+
+.pathfinder {
+    background: #ffffff;
+    height: 5.3%;
+    width: 100%;
+    flex-direction: row;
+    display: inline-flex;
+    padding: 6px 0px 6px 30px;
+}
+
+.pathfinder h1 {
+    padding-right: 30px;
+}
+
+/* Dashboard main */
+
+.dashboard-main {
+    background: #9c9c9c;
+    display: flex;
+    flex-flow: row;
+    height: 89.3%;
+    width: 100%;
+}
+
+/* File list styles */
+
+.file-list {
+    background: #cde0da;
+    width: 70vw;
+    overflow-y: scroll;
+    padding: 30px 30px 30px 30px;
+}
+
+.file-list h1 {
+    margin-bottom: 10px;
+}
+
+.file-list ol {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.file-list ol:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color:rgb(168, 0, 98);
+}
+
+/* Dashboard additional menu styles */
+
+.dashboard-additional-menu {
+    width: 30vw;
+}
+
+/* Image detail styles */
+
+.detail-box {
+    height: 60%;
+    display: flex;
+    flex-flow: column;
+    overflow: auto;
+}
+
+.detail-box img {
+    height: 91.5%;
+    width: 100%;
+}
+
+.button-set {
+    display: flex;
+    position: relative;
+    bottom: 0%;
+}
+
+.button-set button {
+    width: 50%;
+    border: 1px solid #17683b;
+}
+
+/* Upload box styles */
+
+.upload-box {
+    background: #807b7b;
+    height: 25%;
+    padding: 20px;
+    border: 1px solid #000000;
+    overflow: auto;
+}
+
+.upload-box input[type=file] {
+    width: 98%;
+    margin-bottom: 3%;
+}
+
+.upload-box input[type=text] {
+    width: 70%;
+    margin-right: 2%;
+}
+
+.upload-box button {
+    width: 25%;
+}
+
+/* Folder creation styles */
+
+.folder-creation-box {
+    background: #a090aa;
+    height: 15%;
+    padding: 20px;
+    border: 1px solid #000000;
+    overflow: auto;
+}
+
+.folder-creation-box h3 {
+    margin-bottom: 10px;
+}
+
+.folder-creation-box input[type=text] {
+    width: 70%;
+    margin-right: 2%;
+}
+
+.folder-creation-box button {
+    width: 25%;
+}
+
+/* Tag search dashboard top menu */
+
+.search-top-menu {
+    background: #57656e;
+    width: 100vw;
+    flex-direction: row;
+    display: inline-flex;
+    position: relative;
+}
+
+.search-top-menu-search {
+    margin: 0px 20px 0px 20px;
+    padding: 5px 0px 5px 0px;
+    width: 530px;
+}
+
+#back_to_dashboard_button {
+    background: #1d7fbb;
+}
+
+#back_to_dashboard_button:hover {
+    background: #803379;
+}
+
+.search-top-menu-search button {
+    margin-right: 40px;
+}
+
+.search-top-menu-profile {
+    position: absolute;
+    top: 30%;
+    right: 1vw;
+    width: 100px;
+}
+
+.search-top-menu-profile li {
+    list-style: none;
+    color: rgb(255, 255, 255);
+}
+
+.search-top-menu-profile li:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Dashboard main */
+
+.search-dashboard-main {
+    background: #9c9c9c;
+    display: flex;
+    flex-flow: row;
+    height: 94.6%;
+    width: 100%;
+}
+
+/* Tag search dashboard file list */
+
+.search-file-list {
+    background: #cde0da;
+    width: 70vw;
+    overflow-y: scroll;
+    padding: 30px 30px 30px 30px;
+}
+
+.search-file-list h1 {
+    margin-bottom: 10px;
+}
+
+.search-file-list ol {
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.search-file-list ol:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color:rgb(168, 0, 98);
+}
+
+/* Dashboard additional menu styles */
+
+.search-dashboard-additional-menu {
+    width: 30vw;
+}
+
+/* Image detail styles */
+
+.search-detail-box {
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    overflow: auto;
+}
+
+.search-detail-box img {
+    height: 95%;
+    width: 100%;
+}
+
+/* Edit profile styles */
+
+.profile-main {
+    background: #866f72;
+    width: 100%;
+    height: 100vh;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+
+    -webkit-box-align: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center; /* vertical alignment */
+
+    -webkit-box-pack: center;
+    -moz-box-pack: center; 
+    -ms-flex-pack: center; 
+    justify-content: center; /* horizontal alignment */
+}
+
+.profile-centered-form {
+    box-shadow: 0px 0px 17px 1px #1D1F26;
+    background: #F7F7FA;
+    padding: 24px;
+    width: 400px;
+}
+
+.profile-centered-form button {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.profile-centered-form input {
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.profile-centered-form a {
+    font-size: 16px;
+    font-weight: bold;
+    color: #3145a0;
+}
+
+/* Delete account styles */
+
+.delete-centered-form {
+    box-shadow: 0px 0px 17px 1px #1D1F26;
+    background: #F7F7FA;
+    padding: 24px;
+    width: 433px;
+}
+
+.delete-centered-form button {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.delete-centered-form input {
+    margin-bottom: 16px;
+    width: 100%;
+}
+
+.delete-centered-form a {
+    font-size: 16px;
+    font-weight: bold;
+    color: #3145a0;
+}
+
+/* Help page styles */
+
+.help-main {
+    background: #c9c9c9;
+    width: 100%;
+    height: 100vh;
+    padding: 30px;
+}
+
+#return-button {
+    color: rgb(59, 0, 168);
+}

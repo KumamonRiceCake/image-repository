@@ -2,17 +2,22 @@
 <html lang="en">
     <head>
         <title>Welcome</title>
-        <link rel="icon" href="/img/favicon.png">
+        <link rel="icon" href="/img/album.ico">
         <link rel="stylesheet" href="/css/styles.css">
     </head>
     <body>
-        <a href="register.html">Register</a>
-        <form method="POST" action="/users/login">
-            <label for="email">Email</label>
-            <input type="text" name="email" id="email" />
-            <label for="password">Password</label>
-            <input type="text" name="password" id="password" />
-            <button>Login</button>
-        </form>
+        <div class="main">
+            <div class="centered-form">
+                <h1>Image Repository</h1>
+                <form method="POST" action="/users/login">
+                    <label for="email">Email</label>
+                    <input type="text" name="email" id="email" required>
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required>
+                    <button>Login</button>
+                </form>
+                <p>New to this program? <a class="general-link" href="register.html">Register</a></p>
+            </div>
+        </div>
     </body>
 </html>
