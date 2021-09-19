@@ -110,7 +110,7 @@ test('Should not upload duplicate image file', async () => {
 
 test('Should fetch folders in directory', async () => {
     const response = await request(app)
-        .get('/image/folders')
+        .get('/image/folders?directory=test1%')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
         .send({
             directory: 'test1/'
@@ -130,17 +130,15 @@ test('Should not fetch folders if directory is not provided', async () => {
 
 test('Should not fetch folders for nonexistent directory', async () => {
     await request(app)
-        .get('/image/folders')
+        .get('/image/folders?directory=non-exist%')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'non-exist/'
-        })
+        .send()
         .expect(404);
 });
 
 test('Should not fetch folders for unauthenticated user', async () => {
     await request(app)
-        .get('/image/folders')
+        .get('/image/folders?directory=test1%')
         .send({
             directory: 'test1/'
         })
@@ -210,12 +208,9 @@ test('Should not create folder for unauthenticated user', async () => {
 
 test('Should delete file for user', async () => {
     const response = await request(app)
-        .delete('/image')
+        .delete('/image?directory=test1%test1-1%&filename=ex1.png')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'test1/test1-1/',
-            filename: 'ex1.png'
-        })
+        .send()
         .expect(200);
 
     expect(response.body).toMatchObject({
@@ -233,64 +228,49 @@ test('Should delete file for user', async () => {
 });
 
 test('Should delete empty folder for user', async () => {
-    const response = await request(app)
-        .delete('/image')
+    await request(app)
+        .delete('/image?directory=&filename=test2%')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: '',
-            filename: 'test2/'
-        })
+        .send()
         .expect(200);
 });
 
 test('Should not delete file if directory is not provided', async () => {
-    const response = await request(app)
-        .delete('/image')
+    await request(app)
+        .delete('/image?filename=ex1.png')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            filename: 'ex1.png'
-        })
+        .send()
         .expect(400);
 });
 
 test('Should not delete file if file name is not provided', async () => {
-    const response = await request(app)
-        .delete('/image')
+    await request(app)
+        .delete('/image?directory=test1%test1-1%')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'test1/test1-1/'
-        })
+        .send()
         .expect(400);
 });
 
 test('Should not delete non-existent file', async () => {
     await request(app)
-        .delete('/image')
+        .delete('/image?directory=test1%test1-1%&filename=non-existent.txt')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'test1/test1-1/',
-            filename: 'non-existent.txt'
-        })
+        .send()
         .expect(400);
 });
 
 test('Should not delete file for unauthenticated user', async () => {
     await request(app)
-        .delete('/image')
-        .send({
-            directory: 'test1/test1-1/',
-            filename: 'ex1.png'
-        })
+        .delete('/image?directory=test1%test1-1%&filename=ex1.png')
+        .send()
         .expect(401);
 });
 
 test('Should fetch files in directory for user', async () => {
     const response = await request(app)
-        .get('/image/directory')
+        .get('/image/list?directory=test1%test1-1%')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'test1/test1-1/'
-        })
+        .send()
         .expect(200);
 
     expect(response.body.length).toEqual(2);
@@ -298,7 +278,7 @@ test('Should fetch files in directory for user', async () => {
 
 test('Should not fetch files if directory is not provided', async () => {
     await request(app)
-        .get('/image/directory')
+        .get('/image/list')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
         .send()
         .expect(400);
@@ -306,35 +286,27 @@ test('Should not fetch files if directory is not provided', async () => {
 
 test('Should not fetch files in non-existent directory', async () => {
     await request(app)
-        .get('/image/directory')
+        .get('/image/list?directory=non-exist%')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'non-exist/'
-        })
+        .send()
         .expect(404);
 });
 
 test('Should fetch files in directory for unauthenticated user', async () => {
-    const response = await request(app)
-        .get('/image/directory')
-        .send({
-            directory: 'test1/test1-1/'
-        })
+    await request(app)
+        .get('/image/list?directory=test1%test1-1%')
+        .send()
         .expect(401);
 });
 
 test('Should empty directory for user', async () => {
     await request(app)
-        .delete('/image/directory')
+        .delete('/image/directory?directory=test1%')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'test1/'
-        })
+        .send()
         .expect(200);
 
-    const images = await Image.find({
-        owner: userOne._id
-    });
+    const images = await Image.find({ owner: userOne._id });
 
     expect(images.length).toEqual(0);
 });
@@ -349,31 +321,24 @@ test('Should not empty directory if directory is not provided', async () => {
 
 test('Should empty non-existent directory', async () => {
     await request(app)
-        .delete('/image/directory')
+        .delete('/image/directory?directory=non-exist%')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'non-exist/'
-        })
+        .send()
         .expect(404);
 });
 
 test('Should empty directory for user', async () => {
     await request(app)
-        .delete('/image/directory')
-        .send({
-            directory: 'test1/'
-        })
+        .delete('/image/directory?directory=test1%')
+        .send()
         .expect(401);
 });
 
 test('Should get url link of file for user', async () => {
     const response = await request(app)
-        .get('/image')
+        .get('/image/link?directory=test1%test1-1%&filename=ex1.png')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'test1/test1-1/',
-            filename: 'ex1.png'
-        })
+        .send()
         .expect(200);
 
     expect(response.body[0]).toEqual(expect.any(String));
@@ -381,53 +346,40 @@ test('Should get url link of file for user', async () => {
 
 test('Should not get url link of file if directory is not provided', async () => {
     await request(app)
-        .get('/image')
+        .get('/image/link?filename=ex1.png')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            filename: 'ex1.png'
-        })
+        .send()
         .expect(400);
 });
 
 test('Should not get url link of file if file name is not provided', async () => {
     await request(app)
-        .get('/image')
+        .get('/image/link?directory=test1%test1-1%')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'test1/test1-1/'
-        })
+        .send()
         .expect(400);
 });
 
 test('Should not get link of folder', async () => {
     await request(app)
-        .get('/image')
+        .get('/image/link?directory=test1%&filename=test1-1%')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'test1/',
-            filename: 'test1-1/'
-        })
+        .send()
         .expect(404);
 });
 
 test('Should not get link of nonexistent file', async () => {
     await request(app)
-        .get('/image')
+        .get('/image/link?directory=test1%test1-1%&filename=non-existent.jpg')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'test1/test1-1/',
-            filename: 'non-existent.jpg'
-        })
+        .send()
         .expect(404);
 });
 
 test('Should not get url link of file for unauthenticated user', async () => {
     await request(app)
-        .get('/image')
-        .send({
-            directory: 'test1/test1-1/',
-            filename: 'ex1.png'
-        })
+        .get('/image/link?directory=test1%test1-1%&filename=ex1.png')
+        .send()
         .expect(401);
 });
 

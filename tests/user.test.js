@@ -6,24 +6,20 @@ const { userOne, setupDatabase } = require('./fixtures/db');
 beforeEach(setupDatabase);
 
 test('Should signup a new user', async () => {
-    const response = await request(app).post('/users').send({
+    const newUser = {
         name: 'Ana',
         email: 'example@example.com',
         password: 'anaPass123!'
-    }).expect(201);
+    };
+
+    await request(app).post('/users').send(newUser).expect(302).expect('Location', '/dashboard');
 
     // Assert that the DB was changed correctly
-    const user = await User.findById(response.body.user._id);
-    expect(user).not.toBeNull();
-
-    // Assertions about the response
-    expect(response.body).toMatchObject({
-        user: {
-            name: 'Ana',
-            email: 'example@example.com'
-        },
-        token: user.tokens[0].token
+    const user = await User.findOne({
+        name: newUser.name,
+        email: newUser.email
     });
+    expect(user).not.toBeNull();
 
     // Serialized password must be different from the original password
     expect(user.password).not.toBe('anaPass123!');
@@ -74,13 +70,12 @@ test('Should not signup user with existing email', async () => {
 });
 
 test('Should login existing user', async () => {
-    const response = await request(app).post('/users/login').send({
+    await request(app).post('/users/login').send({
         email: userOne.email,
         password: userOne.password
-    }).expect(200);
+    }).expect(302).expect('Location', '/dashboard');
 
     const user = await User.findById(userOne._id);
-    expect(response.body.token).toBe(user.tokens[1].token);
 });
 
 test('Should not login non-existent user', async () => {
@@ -101,7 +96,7 @@ test('Should logout logged-in user', async () => {
     await request(app).post('/users/login').send({
         email: userOne.email,
         password: userOne.password
-    }).expect(200);
+    }).expect(302).expect('Location', '/dashboard');
 
     let user = await User.findById(userOne._id);
     expect(user.tokens.length).toEqual(2);
@@ -127,7 +122,7 @@ test('Should logout all tokens of logged-in user', async () => {
     await request(app).post('/users/login').send({
         email: userOne.email,
         password: userOne.password
-    }).expect(200);
+    }).expect(302).expect('Location', '/dashboard');
 
     let user = await User.findById(userOne._id);
     expect(user.tokens.length).toEqual(2);
