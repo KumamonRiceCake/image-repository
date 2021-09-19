@@ -50,7 +50,7 @@ router.get('/image/list', auth, async (req, res) => {
     try {
         const fileList = await listFiles(req.user._id + '/' + decode(req.query.directory).trim());
 
-        if (fileList.length === 0) {
+        if (fileList.length === 0 && req.query.directory !== '') {
             return res.status(404).send({ error: 'Directory not exist' });
         }
 
