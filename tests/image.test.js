@@ -10,7 +10,7 @@ const { emptyDirectory } = require('../src/routers/utils/s3');
 
 // Setup DB and test image files before each scenario
 beforeEach(async () => {
-    await emptyDirectory('');   // Empty test directory to start in the same environment
+    await emptyDirectory(userOne._id + '/');    // Empty test directory to start in the same environment
     await setupDatabase();
     await request(app)
         .post('/image')
