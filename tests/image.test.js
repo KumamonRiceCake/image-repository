@@ -127,9 +127,7 @@ test('Should fetch folders in directory', async () => {
     const response = await request(app)
         .get('/image/folders?directory=test1%')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
-        .send({
-            directory: 'test1/'
-        })
+        .send()
         .expect(200);
 
     expect(response.body.length).toEqual(1);
@@ -154,9 +152,7 @@ test('Should not fetch folders for nonexistent directory', async () => {
 test('Should not fetch folders for unauthenticated user', async () => {
     await request(app)
         .get('/image/folders?directory=test1%')
-        .send({
-            directory: 'test1/'
-        })
+        .send()
         .expect(401);
 });
 
