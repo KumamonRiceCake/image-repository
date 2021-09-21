@@ -274,7 +274,7 @@ test('Should not delete file if file name is not provided', async () => {
 
 test('Should not delete non-existent file', async () => {
     await request(app)
-        .delete('/image?directory=test1%test1-1%&filename=non-existent.txt')
+        .delete('/image?directory=test1%test1-1%&filename=non-existent.png')
         .set('Cookie', [`auth_token=${userOne.tokens[0].token}`])
         .send()
         .expect(400);
